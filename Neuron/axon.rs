@@ -1,0 +1,1 @@
+// Carries data to axon terminals (synaptic buttons), which connect to other neurons' dendrites
