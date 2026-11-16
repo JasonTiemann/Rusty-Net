@@ -1,1 +1,0 @@
-// Contains the genetic info and determines if information is strong enough

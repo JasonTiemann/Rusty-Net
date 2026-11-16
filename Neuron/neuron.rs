@@ -1,1 +1,0 @@
-// Parent function for whole neuron
