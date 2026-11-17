@@ -1,6 +1,6 @@
 pub const REFRACTORY_PERIOD: i8 = 5;
 pub const TRIGGER_THRESHOLD: f32 = 5.0;
-pub const OUTPUT_AMT: i8 = 1;
+pub const OUTPUT_AMT: f32 = 1.0;
 pub const BASELINE_RETURN_SPEED: f32 = 0.5;
 pub const DENDRITE_STRENGTHEN_FACTOR: f32 = 0.0001;
 pub const DENDRITE_GEN_STRENGTH: f32 = 0.15;
