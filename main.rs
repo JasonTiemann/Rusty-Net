@@ -1,11 +1,9 @@
 mod neuron;
 mod constants;
-use crate::neuron::Dendrite;
+mod brain;
+use crate::brain::Brain;
 
 
 fn main() {
-    let d = Dendrite::new(1);
-
-    println!("{}", d.strength);
-    println!("{}", d.target);
+    let n = Brain::new(5, 1, 1, true);
 }
