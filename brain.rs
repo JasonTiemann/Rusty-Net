@@ -10,6 +10,8 @@ use std::thread::{self, JoinHandle};
 use atomic_float::AtomicF32;
 
 
+
+
 pub struct Brain{
     neurons: Option<[Neuron; TOTAL_NEURONS]>,
     inputs: Arc<Mutex<[f32; INPUT_NEURONS]>>,
@@ -54,9 +56,11 @@ impl Brain{
         let dopamine = Arc::clone(&self.dopamine);
         let inputs = Arc::clone(&self.inputs);
 
-        self.handle = Some(thread::spawn(move ||{
+        self.handle = Some(thread::spawn(move || {
             let mut output_history = [[false; OUTPUT_NEURONS]; OUTPUT_SAMPLE];
             let mut last_run = [false; TOTAL_NEURONS];
+
+            let mut count: i64 = 0;
 
             while running.load(Ordering::Acquire){
                 let current_run = neurons.each_mut().map(|n| n.activate(
@@ -98,6 +102,10 @@ impl Brain{
     pub fn update_inputs(&mut self, input_values: [f32; INPUT_NEURONS]){
         let mut inputs = self.inputs.lock().unwrap();
         *inputs = input_values;
+    }
+
+    pub fn update_dopamine(&mut self, dopamine_value: f32){
+        self.dopamine.store(dopamine_value, Ordering::Relaxed);
     }
 }
 
