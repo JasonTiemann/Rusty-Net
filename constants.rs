@@ -15,4 +15,7 @@ pub const DENDRITE_MAX_STRENGTH: f32 = 5.0;
 pub const POTENTIAL_DENDRITE_ACCEPT_THRESHOLD: f32 =  0.25;
 
 pub const DOPAMINE_MULTI: f32 = 10.0;
+pub const DOPAMINE_TICK: usize = 10;
+pub const DOPAMINE_REGRESS_RATE: f32 = 0.01;
+
 pub const NEURON_HISTORY_LENGTH: usize = 50;

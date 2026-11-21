@@ -1,5 +1,7 @@
 // Holds all the neurons, controls the tick speed and dopamine
 mod neuron;
+mod dopamine;
+
 use crate::brain::neuron::Neuron;
 use crate::constants::{
     INPUT_NEURONS, OUTPUT_NEURONS, OUTPUT_SAMPLE, TOTAL_NEURONS
