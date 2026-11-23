@@ -8,7 +8,9 @@ use learning_neuron::LearningNeuron;
 use input_neuron::InputNeuron;
 use dendrite::Dendrite;
 
-use crate::constants::{INPUT_NEURONS, TOTAL_NEURONS};
+use crate::constants::{
+	INPUT_NEURONS, TOTAL_NEURONS,
+};
 
 
 pub enum Neuron{
@@ -31,7 +33,7 @@ impl Neuron{
     pub fn to_learning(self) -> Neuron{
         match self{
             Neuron::Input(_n) => Neuron::Learning(LearningNeuron::new(&vec![])),
-            Neuron::Base(n) => Neuron::Learning(LearningNeuron::from(n)),
+            Neuron::Base(n) => Neuron::Learning(LearningNeuron::from_base(n)),
             Neuron::Learning(n) => Neuron::Learning(n),
         }
     }

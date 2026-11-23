@@ -1,46 +1,48 @@
-use crate::constants::{DOPAMINE_MULTI, DOPAMINE_TICK};
-use eframe::egui;
-use std::sync::mpsc::{self, Receiver, Sender, TryRecvError};
+use std::sync::{Arc, Mutex};
+use crate::constants::{DOPAMINE_REGRESS_RATE, DOPAMINE_MULTI};
+use crossterm::{
+    cursor::{Hide, MoveTo, Show},
+    event::{self, Event, KeyCode, KeyEventKind},
+    execute,
+    terminal::{disable_raw_mode, enable_raw_mode, Clear, ClearType},
+};
+use std::io::{stdout, Write};
+use std::time::Duration;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Dopamine {
-    Positive,
-    Negative,
+pub enum Feedback {
+    Good,
+    Bad,
 }
 
-struct DopamineDisplay {
-    shared_dopamine: Arc<AtomicF32>,
-    send: Sender<Dopamine>,
-    get: Reciever<Dopamine>,
+/// Cloneable handle. The value is private; the only way to read it is `step()`.
+#[derive(Clone)]
+pub struct Dopamine {
+    value: Arc<Mutex<f32>>
 }
 
-impl Default for DopamineDisplay {
-    fn default() -> Self {
-        let (send, get) = mspc::channel();
-
-        Self {
-            shared_dopamine: Arc::new(AtomicF32::new(0.0)),
-            send,
-            get,
-        }
+impl Dopamine {
+    pub fn new() -> Self {
+        Self { value: Arc::new(Mutex::new(0.0))}
     }
-}
 
-impl eframe::App for DopamineDisplay {
-    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        egui::CentralPanel::default().show(ctx, |ui| {
-            let up_button = ui.add(egui::Button::new("Good"));
-            let down_button = ui.add(egui::Button::new("Bad"));
-
-            if up_button.clicked() {
-                self.shared_dopamine.store();
-            } else if down_button.clicked() {
-                self.shared_dopamine.store();
-            }
-        });
+    /// Decays the value toward zero, then returns it.
+    /// Calling this more often makes the value regress to zero faster.
+    pub fn step(&self) -> f32 {
+        let mut v = self.value.lock().unwrap();
+        *v *= 1.0 - DOPAMINE_REGRESS_RATE;
+        *v
     }
-}
 
-fn main() -> eframe::Result {
-    let shared_dopamine_value = Arc::new();
+	pub fn get(&self) -> f32 {
+		*self.value.lock().unwrap()
+	}
+
+    pub fn up(&self) {
+        *self.value.lock().unwrap() = DOPAMINE_MULTI;
+    }
+
+    pub fn down(&self){
+        *self.value.lock().unwrap() = -1.0 * DOPAMINE_MULTI
+    }
 }

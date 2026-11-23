@@ -9,7 +9,7 @@ pub struct BaseNeuron{
 
 impl BaseNeuron{
     pub fn new(dendrite_targets: &Vec<usize>) -> Self{
-        let dendrites = dendrite_targets.iter().map(|dt| Dendrite::new(*dt)).collect();
+        let dendrites = dendrite_targets.iter().map(|dt| Dendrite::new(*dt, false)).collect::<Vec<Dendrite>>();
 
         Self{
             dendrites,
@@ -30,7 +30,7 @@ impl BaseNeuron{
         if active{
             self.value = 0.0;
         }
-        self.value *= BASELINE_REGRESSION_SPEED;
+        self.value *= 1.0 - BASELINE_REGRESSION_SPEED;
 
         active
     }
